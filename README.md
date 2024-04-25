@@ -10,7 +10,7 @@ If you are going to run this as a pod in your kube cluster, you must first creat
 
 To use, create the docker container
 
-*May need to pre-statge autopilot-fw rule, doesnt matter the contents they will be overwritten
+*Need to pre-statge autopilot-fw rule, doesnt matter the contents they will be overwritten. You can find and replace if you want to change the name of the rule to something else
 
 (sudo) docker build -t google-scripts -f Dockerfile .
 
@@ -23,6 +23,5 @@ CREDENTIALS_FILE=/app/serviceaccount.json (This actually can probably be removed
 RUN_INTERVAL=5m (This will check every 5 minutes and update only if needed)
 GOOGLE_APPLICATION_CREDENTIALS=/app/serviceaccount.json
 
-
-Apologies that this was not tested to see if it creates the rule or needs to be created or removing the CREDENTIALS_FILE config and testing, it works as it is and is not really what I am focused on so already spent more time on it than I wanted. I hope this helps save you some time.
+I hope this helps save you some time.
 
