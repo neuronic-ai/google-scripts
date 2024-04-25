@@ -17,10 +17,15 @@ To use, create the docker container
 Dont forget to set the env settings 
 
 PROJECT=(This is your google project id)
+
 FIREWALL_NAME=(This is the name of the firewall rule)
+
 TARGET_TAG=(this is the destination network tag the rule should target”
+
 CREDENTIALS_FILE=/app/serviceaccount.json (This actually can probably be removed in place of the Google_Application_Credentials)
+
 RUN_INTERVAL=5m (This will check every 5 minutes and update only if needed)
+
 GOOGLE_APPLICATION_CREDENTIALS=/app/serviceaccount.json
 
 I hope this helps save you some time.
