@@ -1,8 +1,12 @@
 ## Automate firewall rules for Google GKE autopilot nodes
 
-Google maintains the GKE nodes themselves for autopilot nodes and provides no way for users to create firewall rules to allow their GKE nodes access to any resources on GCP or other resources that typically are protected by google firewall.  
+This is specifically necessary when using Google Autopilot public clusters which does not let users apply network tags so makes them completey unmanagable despite being ephemeral. 
 
-This script will go out every x minutes and check the kube cluster, pull all the IP's look at your firewall rule "autopilot-rules" and look to see if there are any IP's that are missing or outside of the current node IP list and then update the firewall rule with the new IP's if there is a discrepancy. You may need to create the firewall rule for t to update, the rule already existed when I created this script.
+Also be carefull not to change the method from patch to update, Google has a bug that will re-write the immutable feild of network back to default if you dont specifiy network but there is no option to specify network because it is immutable.
+
+All this script does is go out every x seconds and fetches your kube nodes public addresses and updates the specified firewall rule's source ip's with specifically your current and active node IP's. When a new autopilot node is aded to your cluster, this rule will update your rule to include it.
+
+-----------------------------
 
 There are env settings to customize this, they are rem’d out in the dockerfile as it is better to define the env settings in .env or in a config map.  The Dockerfile expects that your service account json file is in ./serviceaccount.json and will fail if you don’t remove the copy command or update it with the name you used for your creds.  Your service account should have gke admin, gcp instance admin and gcp firewall admin privileges. 
 
