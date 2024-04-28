@@ -17,8 +17,6 @@ def get_node_ips():
 def update_firewall_rules():
     project = os.getenv('PROJECT')
     firewall_name = os.getenv('FIREWALL_NAME')
-    target_tag = os.getenv('TARGET_TAG')
-    credentials_file = os.getenv('CREDENTIALS_FILE')
 
     compute = googleapiclient.discovery.build('compute', 'v1')
 
@@ -34,15 +32,8 @@ def update_firewall_rules():
 
         # Only update if there are changes in the IPs
         if node_ips != current_source_ranges:
-            firewall_body = {
-                "sourceRanges": list(node_ips),
-                "targetTags": [target_tag],
-                "allowed": [
-                    {"IPProtocol": "tcp", "ports": ["2049", "111"]},
-                    {"IPProtocol": "udp", "ports": ["2049", "111"]}
-                ]
-            }
-            compute.firewalls().update(
+            firewall_body = {"sourceRanges": list(node_ips)}
+            compute.firewalls().patch(
                 project=project, firewall=firewall_name, body=firewall_body).execute()
             return "Firewall rules updated"
         else:
@@ -58,5 +49,5 @@ if __name__ == "__main__":
     while True:
         result = update_firewall_rules()
         print(result)
-        time.sleep(300)  # Sleep for 5 minutes (300 seconds)
-
+        interval = int(os.getenv('RUN_INTERVAL', '300'))  # Default to 300 seconds if not set
+        time.sleep(interval)
